@@ -1,0 +1,23 @@
+{
+  "name": "chatterDesktopApp",
+  "version": "0.0.1",
+  "description": "A cross platform chatter desktop app",
+  "main": "main.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patnaikshekhar/ChatterForDesktops.git"
+  },
+  "keywords": [
+    "Chatter",
+    "Salesforce"
+  ],
+  "author": "Shekhar Patnaik <patnaikshekhar@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/patnaikshekhar/ChatterForDesktops/issues"
+  },
+  "homepage": "https://github.com/patnaikshekhar/ChatterForDesktops#readme"
+}
