@@ -19,5 +19,9 @@
   "bugs": {
     "url": "https://github.com/patnaikshekhar/ChatterForDesktops/issues"
   },
-  "homepage": "https://github.com/patnaikshekhar/ChatterForDesktops#readme"
+  "homepage": "https://github.com/patnaikshekhar/ChatterForDesktops#readme",
+  "dependencies": {
+    "angular2": "^2.0.0-alpha.45",
+    "systemjs": "^0.19.5"
+  }
 }

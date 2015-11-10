@@ -3,8 +3,25 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>Chatter for Desktops</title>
+		<script src="node_modules/systemjs/dist/system.src.js"></script>
+		<script src="node_modules/angular2/bundles/angular2.dev.js"></script>
+		<script>
+			System.config({
+				baseURL: __dirname + "/",
+				packages: {
+					'client': {
+						defaultExtension: 'js'
+					},
+					'node_modules': {
+						defaultExtension: 'js'
+					}
+				}
+			});
+			
+			System.import('client/chatterApp');
+		</script>
 	</head>
 	<body>
-		<h1>Chatter</h1>
+		<chatterApp></chatterApp>
 	</body>
 </html>
