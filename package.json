@@ -21,7 +21,9 @@
   },
   "homepage": "https://github.com/patnaikshekhar/ChatterForDesktops#readme",
   "dependencies": {
-    "angular2": "^2.0.0-alpha.45",
-    "systemjs": "^0.19.5"
+    "@reactivex/rxjs": "^5.0.0-alpha.10",
+    "angular2": "^2.0.0-alpha.46",
+    "systemjs": "^0.19.5",
+    "traceur": "0.0.92"
   }
 }

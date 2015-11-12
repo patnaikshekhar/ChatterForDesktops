@@ -22,7 +22,7 @@ app.on('ready', function () {
         width: CONSTANTS.WIDTH,
         height: CONSTANTS.HEIGHT
     });
-    mainWindow.loadUrl("file://" + __dirname + "/index.html");
+    mainWindow.loadUrl(`file://${__dirname}/index.html`);
     if (params.debug) {
         mainWindow.openDevTools();
     }

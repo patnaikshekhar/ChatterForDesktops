@@ -9,18 +9,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var angular2_1 = require('angular2/angular2');
-var ChatterApp = (function () {
-    function ChatterApp() {
+import { Component, bootstrap } from 'angular2/angular2';
+import { IntervalService } from './intervalService';
+export let ChatterApp = class {
+    constructor(intervalService) {
+        this.title = 'Chatter';
+        this.intervalService = intervalService;
     }
-    ChatterApp = __decorate([
-        angular2_1.Component({
-            selector: 'chatterApp',
-            template: "\n\t<h1>Chatter</h1>\n\t"
-        }), 
-        __metadata('design:paramtypes', [])
-    ], ChatterApp);
-    return ChatterApp;
-})();
-angular2_1.bootstrap(ChatterApp);
+    run() {
+        console.log('running');
+        this.intervalService.run()
+            .subscribe(() => console.log('called'), err => console.error(err), () => console.log('Done'));
+    }
+};
+ChatterApp = __decorate([
+    Component({
+        selector: 'chatterApp',
+        template: `
+	<h1>{{ title }}</h1>
+	<button (click)="run()">Run</button>
+	`
+    }), 
+    __metadata('design:paramtypes', [IntervalService])
+], ChatterApp);
+bootstrap(ChatterApp, [IntervalService]);
 //# sourceMappingURL=chatterApp.js.map

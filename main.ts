@@ -1,16 +1,16 @@
 /// <reference path="./typings/tsd.d.ts" />
 
-import app = require('app');
-import BrowserWindow = require('browser-window');
+var app = require('app');
+var BrowserWindow = require('browser-window');
 
 var mainWindow = null;
 
-let CONSTANTS = {
+var CONSTANTS = {
 	WIDTH: 800,
 	HEIGHT: 800
 };
 
-let params = {
+var params = {
 	debug: true	
 };
 
