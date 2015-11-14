@@ -10,16 +10,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Component, bootstrap } from 'angular2/angular2';
-import { IntervalService } from './intervalService';
+import { jsforceService } from './jsforceService';
 export let ChatterApp = class {
-    constructor(intervalService) {
+    constructor(forceService) {
+        this.forceService = forceService;
         this.title = 'Chatter';
-        this.intervalService = intervalService;
     }
     run() {
-        console.log('running');
-        this.intervalService.run()
-            .subscribe(() => console.log('called'), err => console.error(err), () => console.log('Done'));
+        this.forceService.connect()
+            .subscribe(_ => console.log('connected'));
     }
 };
 ChatterApp = __decorate([
@@ -30,7 +29,7 @@ ChatterApp = __decorate([
 	<button (click)="run()">Run</button>
 	`
     }), 
-    __metadata('design:paramtypes', [IntervalService])
+    __metadata('design:paramtypes', [jsforceService])
 ], ChatterApp);
-bootstrap(ChatterApp, [IntervalService]);
+bootstrap(ChatterApp, [jsforceService]);
 //# sourceMappingURL=chatterApp.js.map

@@ -10,7 +10,7 @@ export class IntervalService {
 		
 		return Rx.Observable.create(function(subscriber : Rx.Subscriber<void>) {
 			console.log(subscriber);
-			setInterval(() => subscriber.next({}), 2000);
+			setInterval(() => subscriber.next(), 2000);
 			
 			return function() {
 				console.log('disposed');

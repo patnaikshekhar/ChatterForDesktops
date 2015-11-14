@@ -1,7 +1,25 @@
 /// <reference path="./typings/tsd.d.ts" />
 
+// Removed all ES6 references because of errors
+
 var app = require('app');
 var BrowserWindow = require('browser-window');
+
+// Add IPC for login flow
+var ipc = require('ipc');
+var request = require('request');
+var url = require('url');
+
+// Constants
+var CLIENT_ID: string = '3MVG9WtWSKUDG.x6VWHkBVtkcEM.AMn8Dlp0LyYhq4MD6lcKq1smLVxRu09brLj0PwAJTHG3IWS0UNYda0q3d';
+var CLIENT_SECRET: string = '7129679440721493406';
+
+var REDIRECT_URI: string = 'https://boiling-ridge-4531.herokuapp.com';
+var AUTH_BASE_URL: string = 'https://login.salesforce.com/services/oauth2';
+var AUTH_URL: string = AUTH_BASE_URL + '/authorize?response_type=code&client_id=' + CLIENT_ID + '&redirect_uri=' + REDIRECT_URI;
+var AUTH_TOKEN_URL: string = AUTH_BASE_URL + '/token';
+// This is the final title string which will be watched for
+var FINAL_TITLE: string = 'Movie Bookmarks';
 
 var mainWindow = null;
 
@@ -36,7 +54,63 @@ app.on('ready', function() {
 		mainWindow.openDevTools();	
 	}
 	
+	// When login Flow is called, then call server
+	ipc.on('login', function(event) {
+		var authWindow = new BrowserWindow({ width: 800, height: 600, show: false, 'node-integration': false });
+		authWindow.loadUrl(AUTH_URL);
+		authWindow.show();
+		
+		authWindow.on('page-title-updated', function(e, title) {
+			if (title == FINAL_TITLE) {
+				// Get the URL of the window
+				var url = authWindow.webContents.getUrl();
+				var raw_code = /code=([^&]*)/.exec(url) || null,
+    				code = (raw_code && raw_code.length > 1) ? decodeURIComponent(raw_code[1]) : null,
+    				error = /\?error=(.+)$/.exec(url);
+					
+				if (code || error) {
+					if (error) {
+						// Send error to window
+						event.sender.send('logInError'. error);
+					} else {
+						tokenFromCode(code, function(error: string, token: string) {
+							if (error) {
+								event.sender.send('logInError'. error);
+							} else {
+								event.sender.send('loggedInSuccess'. token);	
+							}
+						});
+					}
+				}	
+			}
+		});
+	});
+
 	mainWindow.on('closed', function() {
 		mainWindow = null;
 	});
+	
+	function tokenFromCode(code:string, callback:(err: string, token: string) => void) {
+		console.log('URL', AUTH_TOKEN_URL, code);
+		request.post(AUTH_TOKEN_URL, {
+			form: {
+				code: code,
+				client_id: CLIENT_ID,
+				client_secret: CLIENT_SECRET,
+				grant_type: 'authorization_code',
+				redirect_uri: REDIRECT_URI
+			}
+		}, function(err, response, body) {
+			if (err) {
+				console.log('******Error', err);
+				//callback(err, null);	
+			} else {
+				console.log('Body', body);
+				var message = JSON.parse(body);
+				var accessToken = message.access_token;
+			
+				//callback(null, accessToken);	
+			}	
+		});
+	}
 });
