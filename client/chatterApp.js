@@ -10,15 +10,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Component, bootstrap } from 'angular2/angular2';
+import { HTTP_PROVIDERS } from 'angular2/http';
 import { jsforceService } from './jsforceService';
 export let ChatterApp = class {
     constructor(forceService) {
         this.forceService = forceService;
         this.title = 'Chatter';
     }
+    handleError(error) {
+        console.error(error);
+    }
     run() {
         this.forceService.connect()
-            .subscribe(_ => console.log('connected'));
+            .subscribe(_ => {
+            this.forceService.getFeeds()
+                .subscribe(response => console.log(response), handleError);
+        }, handleError);
     }
 };
 ChatterApp = __decorate([
@@ -31,5 +38,5 @@ ChatterApp = __decorate([
     }), 
     __metadata('design:paramtypes', [jsforceService])
 ], ChatterApp);
-bootstrap(ChatterApp, [jsforceService]);
+bootstrap(ChatterApp, [HTTP_PROVIDERS, jsforceService]);
 //# sourceMappingURL=chatterApp.js.map

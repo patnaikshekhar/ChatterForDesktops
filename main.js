@@ -53,15 +53,18 @@ app.on('ready', function () {
                 if (code || error) {
                     if (error) {
                         // Send error to window
-                        event.sender.send('logInError'.error);
+                        mainWindow.webContents.send('logInError', error);
                     }
                     else {
-                        tokenFromCode(code, function (error, token) {
+                        tokenFromCode(code, function (error, token, instanceUrl) {
                             if (error) {
-                                event.sender.send('logInError'.error);
+                                mainWindow.webContents.send('logInError', error);
                             }
                             else {
-                                event.sender.send('loggedInSuccess'.token);
+                                mainWindow.webContents.send('logInSuccess', {
+                                    token: token,
+                                    instanceUrl: instanceUrl
+                                });
                             }
                         });
                     }
@@ -73,7 +76,6 @@ app.on('ready', function () {
         mainWindow = null;
     });
     function tokenFromCode(code, callback) {
-        console.log('URL', AUTH_TOKEN_URL, code);
         request.post(AUTH_TOKEN_URL, {
             form: {
                 code: code,
@@ -84,12 +86,14 @@ app.on('ready', function () {
             }
         }, function (err, response, body) {
             if (err) {
-                console.log('******Error', err);
+                callback(err, null);
             }
             else {
                 console.log('Body', body);
                 var message = JSON.parse(body);
                 var accessToken = message.access_token;
+                var instanceUrl = message.instance_url;
+                callback(null, accessToken, instanceUrl);
             }
         });
     }

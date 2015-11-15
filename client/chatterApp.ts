@@ -1,5 +1,6 @@
 import {Component, bootstrap} from 'angular2/angular2'
 import {Observable, Inject} from 'angular2/core';
+import {HTTP_PROVIDERS} from 'angular2/http';
 
 import {jsforceService} from './jsforceService'
 
@@ -17,10 +18,22 @@ export class ChatterApp {
 	constructor(private forceService : jsforceService) {
 	}
 	
+	handleError(error: string) {
+		console.error(error);
+	}
+	
 	run() {
 		this.forceService.connect()
-			.subscribe(_ => console.log('connected'));
+			.subscribe(
+				_ => {
+					this.forceService.getFeeds()
+						.subscribe(
+							response => console.log(response), 
+							handleError)
+				}, 
+				handleError
+			);
 	}
 }
 
-bootstrap(ChatterApp, [jsforceService]);
+bootstrap(ChatterApp, [HTTP_PROVIDERS, jsforceService]);
