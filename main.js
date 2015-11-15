@@ -89,7 +89,6 @@ app.on('ready', function () {
                 callback(err, null);
             }
             else {
-                console.log('Body', body);
                 var message = JSON.parse(body);
                 var accessToken = message.access_token;
                 var instanceUrl = message.instance_url;

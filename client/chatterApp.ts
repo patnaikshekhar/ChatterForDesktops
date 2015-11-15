@@ -24,14 +24,10 @@ export class ChatterApp {
 	
 	run() {
 		this.forceService.connect()
+			.flatMap(_ => this.forceService.getFeeds())
 			.subscribe(
-				_ => {
-					this.forceService.getFeeds()
-						.subscribe(
-							response => console.log(response), 
-							handleError)
-				}, 
-				handleError
+				response => console.log(response),
+				this.handleError
 			);
 	}
 }

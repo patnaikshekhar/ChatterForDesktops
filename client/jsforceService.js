@@ -30,7 +30,6 @@ export class jsforceService {
                 this.token = obj.token;
                 this.instanceUrl = obj.instanceUrl;
                 subscriber.next();
-                subscriber.complete();
             });
             ipc.on('logInError', (error) => {
                 console.error('Log in failed', error);

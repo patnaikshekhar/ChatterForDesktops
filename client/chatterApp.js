@@ -22,10 +22,8 @@ export let ChatterApp = class {
     }
     run() {
         this.forceService.connect()
-            .subscribe(_ => {
-            this.forceService.getFeeds()
-                .subscribe(response => console.log(response), handleError);
-        }, handleError);
+            .flatMap(_ => this.forceService.getFeeds())
+            .subscribe(response => console.log(response), this.handleError);
     }
 };
 ChatterApp = __decorate([

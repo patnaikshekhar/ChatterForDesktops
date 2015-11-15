@@ -32,7 +32,6 @@ export class jsforceService {
 				this.instanceUrl = obj.instanceUrl;
 				
 				subscriber.next();
-				subscriber.complete();
 			});
 			
 			ipc.on('logInError', (error) => {
