@@ -6,6 +6,7 @@ var BrowserWindow = require('browser-window');
 var ipc = require('ipc');
 var request = require('request');
 var url = require('url');
+var db = levelup('./chatter');
 // Constants
 var CLIENT_ID = '3MVG9WtWSKUDG.x6VWHkBVtkcEM.AMn8Dlp0LyYhq4MD6lcKq1smLVxRu09brLj0PwAJTHG3IWS0UNYda0q3d';
 var CLIENT_SECRET = '7129679440721493406';
@@ -71,6 +72,7 @@ app.on('ready', function () {
                 }
             }
         });
+        ipc.on('db-put', putInDB);
     });
     mainWindow.on('closed', function () {
         mainWindow = null;
@@ -93,6 +95,41 @@ app.on('ready', function () {
                 var accessToken = message.access_token;
                 var instanceUrl = message.instance_url;
                 callback(null, accessToken, instanceUrl);
+            }
+        });
+    }
+    function putInDB(obj) {
+        db.put(obj.key, obj.value, function (err) {
+            if (mainWindow) {
+                if (err) {
+                    mainWindow.webContents.send('db-put-error', {
+                        error: err,
+                        reference: obj.reference
+                    });
+                }
+                else {
+                    mainWindow.webContents.send('db-put-complete', {
+                        reference: obj.reference
+                    });
+                }
+            }
+        });
+    }
+    function getFromDB(obj) {
+        db.get(obj.key, function (err, value) {
+            if (mainWindow) {
+                if (err) {
+                    mainWindow.webContents.send('db-get-error', {
+                        error: err,
+                        reference: obj.reference
+                    });
+                }
+                else {
+                    mainWindow.webContents.send('db-get-complete', {
+                        value: value,
+                        reference: obj.reference
+                    });
+                }
             }
         });
     }
